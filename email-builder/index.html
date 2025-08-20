@@ -4,11 +4,15 @@
   <meta charset="UTF-8" />
   <title>Email Builder — Projects & Modules</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
           colors: {
             brand: { DEFAULT: '#605bff', 600: '#4f46e5', 700: '#4338ca' },
             ink: '#0f172a',
@@ -17,7 +21,7 @@
           boxShadow: {
             soft: '0 8px 24px rgba(15,23,42,.06)'
           },
-          borderRadius: { 'xl': '0.875rem' }
+          borderRadius: { xl: '0.875rem' }
         }
       }
     }
@@ -116,7 +120,7 @@
     .muted{color:var(--muted)}
   </style>
 </head>
-<body>
+<body class="font-sans">
   <header class="sticky top-0 z-10 w-full bg-gradient-to-r from-brand to-violet-600 text-white shadow">
     <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
       <h1 class="text-base font-bold tracking-tight">Email Builder</h1>
