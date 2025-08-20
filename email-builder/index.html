@@ -85,7 +85,7 @@
     .list{padding:12px}
     .proj-row{
       display:grid;grid-template-columns:1fr 180px 160px;gap:10px;align-items:center;
-      padding:12px;border-bottom:1px solid var(--border)
+      padding:12px;border-bottom:1px solid var(--border);cursor:pointer
     }
     .empty{padding:16px}
     /* Modules repo (code editor) */
@@ -237,6 +237,7 @@
       if (modules.length === 0) seedStarterModules();
       // scrub: ensure all project instances reference existing modules
       projects.forEach(p => {
+        p.tags = p.tags || [];
         p.instances = (p.instances || []).filter(inst => modules.some(m => m.id === inst.moduleId));
         // normalize colors once on load
         (p.instances || []).forEach(inst => {
@@ -507,20 +508,34 @@ a { color: {{brandColor}}; }
           const row = document.createElement("div");
           row.className = "proj-row";
           const count = (p.instances||[]).length;
+          const tagHtml = (p.tags || []).map(t => `<span class="pill">${t}</span>`).join(" ");
           row.innerHTML = `
-            <div><strong>${p.name}</strong></div>
+            <div><strong>${p.name}</strong> ${tagHtml}</div>
             <div class="pill">${count} module${count!==1?"s":""}</div>
             <div class="pill">${new Date(p.updatedAt||p.createdAt).toLocaleString()}</div>
           `;
+          row.addEventListener("click", () => editProjectTags(p.id));
           projectsList.appendChild(row);
         });
+    }
+    function editProjectTags(id){
+      const p = getProject(id); if (!p) return;
+      const current = (p.tags || []).join(', ');
+      const input = prompt('Tags? (comma separated)', current);
+      if (input === null) return;
+      p.tags = input.split(',').map(t => t.trim()).filter(Boolean);
+      p.updatedAt = new Date().toISOString();
+      saveProjects();
+      renderProjectsList();
     }
     function newProject(){
       const name = prompt("Project name?");
       if (!name) return;
+      const tagInput = prompt("Tags? (comma separated)");
+      const tags = tagInput ? tagInput.split(',').map(t=>t.trim()).filter(Boolean) : [];
       const id = uid("proj");
       const now = new Date().toISOString();
-      projects.push({ id, name, createdAt: now, updatedAt: now, instances: [] });
+      projects.push({ id, name, tags, createdAt: now, updatedAt: now, instances: [] });
       saveProjects();
       go("#/projects");
     }
