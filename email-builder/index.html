@@ -70,7 +70,6 @@
     .btn:focus-visible{outline-color:var(--brand-600)}
     .nav{display:flex;gap:var(--space-2);align-items:center}
     /* Header */
-    main{padding:var(--space-4)}
     .hidden{display:none!important}
     .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-md);overflow:hidden}
     .bar{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3);border-bottom:1px solid var(--border);background:#fcfcff}
@@ -124,16 +123,25 @@
   <header class="sticky top-0 z-10 w-full bg-gradient-to-r from-brand to-violet-600 text-white shadow">
     <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
       <h1 class="text-base font-bold tracking-tight">Email Builder</h1>
-      <nav class="flex items-center gap-2">
-        <a href="#/" class="inline-flex items-center rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Home</a>
-        <a href="#/projects" class="inline-flex items-center rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Projects</a>
-        <a href="#/modules" class="inline-flex items-center rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Modules</a>
+      <div class="flex items-center gap-2">
+        <div id="userSpot"></div>
         <button id="btnCopy" class="hidden inline-flex items-center rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" title="Copy Final HTML from Composer">Copy HTML</button>
-      </nav>
+      </div>
     </div>
   </header>
 
-  <main>
+  <div class="flex min-h-screen">
+    <aside class="hidden md:block w-48 bg-white border-r">
+      <nav class="flex flex-col p-4 space-y-2">
+        <a href="#/" class="rounded px-3 py-2 hover:bg-slate-100">Home</a>
+        <a href="#/projects" class="rounded px-3 py-2 hover:bg-slate-100">Projects</a>
+        <a href="#/modules" class="rounded px-3 py-2 hover:bg-slate-100">Modules</a>
+        <a href="#/composer" class="rounded px-3 py-2 hover:bg-slate-100">Composer</a>
+      </nav>
+    </aside>
+
+    <main class="flex-1">
+      <div class="mx-auto max-w-5xl p-4">
     <!-- HOME -->
     <section id="view-home" class="flex flex-col items-center justify-center text-center py-20">
       <div>
@@ -225,7 +233,12 @@
         </section>
       </div>
     </section>
-  </main>
+
+    <!-- AUTH PLACEHOLDER -->
+    <section id="view-auth" class="card hidden"></section>
+      </div>
+    </main>
+  </div>
 
   <script>
     /* ===== Storage keys ===== */
@@ -246,7 +259,8 @@
       home: $("#view-home"),
       projects: $("#view-projects"),
       composer: $("#view-composer"),
-      modules: $("#view-modules")
+      modules: $("#view-modules"),
+      auth: $("#view-auth")
     };
 
     const nvGrid = $("#nvGrid");
@@ -295,6 +309,9 @@
           renderComposerInputs();
           renderPreviewOnly();
           composerProjectName.textContent = getProject(currentProjectId).name;
+          break;
+        case "auth":
+          views.auth.classList.remove("hidden");
           break;
         default:
           views.home.classList.remove("hidden");
