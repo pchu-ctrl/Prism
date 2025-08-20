@@ -84,30 +84,10 @@
     /* Projects list */
     .list{padding:12px}
     .proj-row{
-      display:grid;grid-template-columns:1fr 180px 160px 120px;gap:10px;align-items:center;
+      display:grid;grid-template-columns:1fr 180px 160px;gap:10px;align-items:center;
       padding:12px;border-bottom:1px solid var(--border)
     }
     .empty{padding:16px}
-    /* Composer layout */
-    .grid{display:grid;grid-template-columns:40% 60%;min-height:calc(100vh - 185px)}
-    .nv{border-right:1px solid var(--border);background:#fff;display:grid;grid-template-rows:auto 1fr}
-    .nv-head{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:10px 16px;border-bottom:1px solid var(--border)}
-    .nv-head h3,.preview-head h3{margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-    .nv-body{overflow:auto}
-    .nv-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:16px}
-    .sep{
-      grid-column:1 / span 2;display:flex;align-items:center;justify-content:space-between;
-      padding:8px 12px;margin:0 0 10px;background:var(--accent);border:1px dashed #bae6fd;border-radius:999px;user-select:none
-    }
-    .handle{cursor:grab;color:var(--brand-600);display:flex;align-items:center;gap:8px}
-    .drop{grid-column:1 / span 2;height:10px;border-radius:999px;background:#bae6fd;opacity:0;transform:scaleY(.5);transition:.15s ease;margin:6px 0}
-    .drop.active{opacity:1;transform:scaleY(1)}
-    .name-chip{padding:10px 12px;border-radius:999px;background:#f8fafc;border:1px solid var(--border);font-size:14px;color:#111827;margin:0 12px 8px 0}
-    .value-row input{width:100%;border-radius:999px;background:#fff;border:1px solid var(--border);padding:10px 12px;margin:0 0 8px 12px}
-    .preview-wrap{background:#fff}
-    .preview-head{padding:10px 16px;border-bottom:1px solid var(--border)}
-    .preview{height:100%;overflow:auto;padding:16px}
-    .frame{margin:8px 0}
     /* Modules repo (code editor) */
     .repo{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 160px)}
     .repo-list{border-right:1px solid var(--border);padding:16px;background:#fff}
@@ -125,7 +105,6 @@
       <h1 class="text-base font-bold tracking-tight">Email Builder</h1>
       <div class="flex items-center gap-2">
         <div id="userSpot"></div>
-        <button id="btnCopy" class="hidden inline-flex items-center rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" title="Copy Final HTML from Composer">Copy HTML</button>
       </div>
     </div>
   </header>
@@ -136,7 +115,6 @@
         <a href="#/" class="rounded px-3 py-2 hover:bg-slate-100">Home</a>
         <a href="#/projects" class="rounded px-3 py-2 hover:bg-slate-100">Projects</a>
         <a href="#/modules" class="rounded px-3 py-2 hover:bg-slate-100">Modules</a>
-        <a href="#/composer" class="rounded px-3 py-2 hover:bg-slate-100">Composer</a>
       </nav>
     </aside>
 
@@ -159,43 +137,6 @@
         <button class="btn" onclick="newProject()">New Project</button>
       </div>
       <div id="projectsList" class="list"></div>
-    </section>
-
-    <!-- COMPOSER (per project) -->
-    <section id="view-composer" class="card hidden">
-      <div class="bar">
-        <button class="btn ghost" onclick="go('#/projects')">← Back to Projects</button>
-        <span id="composerProjectName" class="pill"></span>
-        <span class="pill">Drag to reorder • Names & values scroll together • Colors auto-normalize</span>
-      </div>
-
-      <div class="grid">
-        <!-- Left 40%: Names + Values inside shared scroll -->
-        <div class="nv">
-          <div class="nv-head">
-            <h3>Variable Names</h3>
-            <h3>Values</h3>
-          </div>
-          <div class="nv-body">
-            <div id="nvGrid" class="nv-grid"></div>
-
-            <!-- Add module controls under existing modules -->
-            <div style="padding:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-              <div style="grid-column:1 / span 2;">
-                <div class="pill" style="display:inline-block">Add a module below</div>
-              </div>
-              <div><select id="addSelect"></select></div>
-              <div><button class="btn ghost" id="btnAdd">Add Module</button></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right 60%: Preview -->
-        <div class="preview-wrap">
-          <div class="preview-head"><h3>Combined Preview</h3></div>
-          <div id="previewCol" class="preview"></div>
-        </div>
-      </div>
     </section>
 
     <!-- MODULES (Repo / Code Editor) -->
@@ -238,7 +179,6 @@
     let modules = [];   // [{id, name, code}]
     let projects = [];  // [{id, name, instances:[{instanceId,moduleId,values:{}}], createdAt, updatedAt}]
     let editingModuleId = null;
-    let currentProjectId = null;
 
     /* ===== DOM Helpers ===== */
     const $ = s => document.querySelector(s);
@@ -247,18 +187,11 @@
     const views = {
       home: $("#view-home"),
       projects: $("#view-projects"),
-      composer: $("#view-composer"),
       modules: $("#view-modules"),
       auth: $("#view-auth")
     };
 
-    const nvGrid = $("#nvGrid");
-    const previewCol = $("#previewCol");
-    const addSelect = $("#addSelect");
-    const btnAdd = $("#btnAdd");
-    const btnCopy = $("#btnCopy");
     const projectsList = $("#projectsList");
-    const composerProjectName = $("#composerProjectName");
 
     const repoList = $("#repoList");
     const modName = $("#modName");
@@ -275,9 +208,8 @@
     function renderRoute(){
       // hide all
       Object.values(views).forEach(v => v.classList.add("hidden"));
-      btnCopy.classList.add("hidden");
 
-      const [_, route, arg] = location.hash.split("/");
+      const [_, route] = location.hash.split("/");
       switch(route){
         case "projects":
           views.projects.classList.remove("hidden");
@@ -286,18 +218,6 @@
         case "modules":
           views.modules.classList.remove("hidden");
           renderRepo();
-          break;
-        case "composer":
-          currentProjectId = arg || null;
-          if (!currentProjectId || !getProject(currentProjectId)){
-            go("#/projects"); return;
-          }
-          views.composer.classList.remove("hidden");
-          btnCopy.classList.remove("hidden");
-          buildAddDropdown();
-          renderComposerInputs();
-          renderPreviewOnly();
-          composerProjectName.textContent = getProject(currentProjectId).name;
           break;
         case "auth":
           views.auth.classList.remove("hidden");
@@ -564,7 +484,6 @@ a { color: {{brandColor}}; }
     function uid(p="id"){ return p+"_"+Math.random().toString(36).slice(2,8)+Date.now().toString(36); }
     function getProject(id){ return projects.find(p => p.id === id); }
     function getModule(id){ return modules.find(m => m.id === id); }
-    function extractVars(code){ const m = code.match(/{{\s*([\w.\-]+)\s*}}/g) || []; return [...new Set(m.map(t => t.replace(/{{\s*|\s*}}/g,"")))] }
     function normalizeHexIfColor(key, value){
       if (!value) return value;
       if (!/(color|colour|bg|background|brand|ctaColor|bannerBg)/i.test(key)) return value;
@@ -572,11 +491,6 @@ a { color: {{brandColor}}; }
       if (v.startsWith("#")) v = v.slice(1);
       if (/^[0-9a-fA-F]{3}$/.test(v) || /^[0-9a-fA-F]{6}$/.test(v)) return "#" + v.toUpperCase();
       return value;
-    }
-    function applyValues(code, values){
-      const normalized = {};
-      for (const k in values) normalized[k] = normalizeHexIfColor(k, values[k]);
-      return code.replace(/{{\s*([\w.\-]+)\s*}}/g, (_, k) => (normalized[k] ?? ""));
     }
 
     /* ===== Projects list ===== */
@@ -597,9 +511,7 @@ a { color: {{brandColor}}; }
             <div><strong>${p.name}</strong></div>
             <div class="pill">${count} module${count!==1?"s":""}</div>
             <div class="pill">${new Date(p.updatedAt||p.createdAt).toLocaleString()}</div>
-            <div style="text-align:right;"><button class="btn" data-id="${p.id}">Open</button></div>
           `;
-          qs(row, "button").addEventListener("click", ()=> go(`#/composer/${p.id}`));
           projectsList.appendChild(row);
         });
     }
@@ -610,173 +522,9 @@ a { color: {{brandColor}}; }
       const now = new Date().toISOString();
       projects.push({ id, name, createdAt: now, updatedAt: now, instances: [] });
       saveProjects();
-      go(`#/composer/${id}`);
+      go("#/projects");
     }
 
-    /* ===== Composer (per project) ===== */
-    function buildAddDropdown(){
-      addSelect.innerHTML = `<option value="">Select a module…</option>`;
-      modules.forEach(m => {
-        const opt = document.createElement("option");
-        opt.value = m.id; opt.text = m.name;
-        addSelect.appendChild(opt);
-      });
-      btnAdd.onclick = () => {
-        const moduleId = addSelect.value;
-        if (!moduleId) return;
-        const mod = getModule(moduleId);
-        const p = getProject(currentProjectId);
-        const instance = { instanceId: uid("inst"), moduleId, values: {} };
-        extractVars(mod.code).forEach(k => (instance.values[k] = ""));
-        p.instances.push(instance);
-        p.updatedAt = new Date().toISOString();
-        saveProjects();
-        addSelect.value = "";
-        renderComposerInputs(); renderPreviewOnly();
-      };
-    }
-
-    function renderComposerInputs(){
-      const p = getProject(currentProjectId);
-      const composer = p.instances || [];
-      nvGrid.innerHTML = "";
-      if (composer.length === 0){
-        const empty = document.createElement("div");
-        empty.className = "pill"; empty.style.gridColumn = "1 / span 2";
-        empty.textContent = "No modules yet — add one below.";
-        nvGrid.appendChild(empty);
-        previewCol.innerHTML = `<div class="pill" style="display:inline-block">Nothing to preview yet.</div>`;
-        return;
-      }
-
-      composer.forEach(inst => {
-        const mod = getModule(inst.moduleId);
-        if (!mod) return;
-        const keys = extractVars(mod.code);
-        inst.values = inst.values || {};
-        keys.forEach(k => { if (!(k in inst.values)) inst.values[k] = ""; });
-
-        // Separator row (drag handle + delete)
-        const sep = document.createElement("div");
-        sep.className = "sep"; sep.style.gridColumn = "1 / span 2"; sep.draggable = true;
-        sep.dataset.instanceId = inst.instanceId;
-        const handle = document.createElement("div");
-        handle.className = "handle"; handle.innerHTML = `☰ ${mod.name}`;
-        const del = document.createElement("button");
-        del.className = "btn danger"; del.textContent = "Delete";
-        del.onclick = () => {
-          p.instances = p.instances.filter(x => x.instanceId !== inst.instanceId);
-          p.updatedAt = new Date().toISOString();
-          saveProjects();
-          renderComposerInputs(); renderPreviewOnly();
-        };
-        sep.appendChild(handle); sep.appendChild(del);
-        nvGrid.appendChild(sep);
-
-        // Drop indicator
-        const drop = document.createElement("div");
-        drop.className = "drop";
-        nvGrid.appendChild(drop);
-
-        // Aligned rows (name | value)
-        keys.forEach(k => {
-          const nameCell = document.createElement("div");
-          nameCell.className = "name-chip";
-          nameCell.textContent = k;
-          nvGrid.appendChild(nameCell);
-
-          const valueCell = document.createElement("div");
-          valueCell.className = "value-row";
-          const input = document.createElement("input");
-          input.placeholder = `Value for ${k}`;
-          input.value = normalizeHexIfColor(k, inst.values[k] ?? "");
-          input.dataset.instanceId = inst.instanceId;
-          input.dataset.key = k;
-
-          input.addEventListener("input", e => {
-            const { instanceId, key } = e.target.dataset;
-            const ci = p.instances.find(x => x.instanceId === instanceId);
-            if (!ci) return;
-            ci.values[key] = normalizeHexIfColor(key, e.target.value);
-            p.updatedAt = new Date().toISOString();
-            saveProjects();
-            renderPreviewOnly();
-          });
-          input.addEventListener("blur", e => {
-            const { instanceId, key } = e.target.dataset;
-            const ci = p.instances.find(x => x.instanceId === instanceId);
-            if (!ci) return;
-            const norm = normalizeHexIfColor(key, e.target.value);
-            e.target.value = norm;
-            ci.values[key] = norm;
-            p.updatedAt = new Date().toISOString();
-            saveProjects();
-          });
-
-          valueCell.appendChild(input);
-          nvGrid.appendChild(valueCell);
-        });
-
-        // DnD
-        sep.addEventListener("dragstart", e => {
-          e.dataTransfer.setData("text/plain", inst.instanceId);
-          sep.classList.add("dragging");
-        });
-        sep.addEventListener("dragend", () => {
-          sep.classList.remove("dragging");
-          [...nvGrid.querySelectorAll(".drop")].forEach(d => d.classList.remove("active"));
-        });
-      });
-
-      // grid-level dragover/drop
-      nvGrid.onDragOverAttached || (nvGrid.onDragOverAttached = (
-        nvGrid.addEventListener("dragover", e => {
-          e.preventDefault();
-          const indicators = [...nvGrid.querySelectorAll(".drop")];
-          let closest = null, closestDist = Infinity;
-          indicators.forEach(ind => {
-            const r = ind.getBoundingClientRect();
-            const dist = Math.abs(e.clientY - r.top);
-            if (dist < closestDist){ closestDist = dist; closest = ind; }
-            ind.classList.remove("active");
-          });
-          if (closest) closest.classList.add("active");
-        }, { passive:false })
-      ));
-      nvGrid.onDropAttached || (nvGrid.onDropAttached = (
-        nvGrid.addEventListener("drop", e => {
-          e.preventDefault();
-          const p = getProject(currentProjectId);
-          const srcId = e.dataTransfer.getData("text/plain");
-          const indicators = [...nvGrid.querySelectorAll(".drop")];
-          const activeIdx = indicators.findIndex(d => d.classList.contains("active"));
-          indicators.forEach(d => d.classList.remove("active"));
-          if (activeIdx < 0) return;
-
-          const seps = [...nvGrid.querySelectorAll(".sep")];
-          const destIndex = Math.min(activeIdx, seps.length);
-          const srcIndex = p.instances.findIndex(i => i.instanceId === srcId);
-          if (srcIndex < 0) return;
-
-          const [moved] = p.instances.splice(srcIndex, 1);
-          p.instances.splice(destIndex, 0, moved);
-          p.updatedAt = new Date().toISOString();
-          saveProjects();
-          renderComposerInputs(); renderPreviewOnly();
-        })
-      ));
-    }
-
-    function renderPreviewOnly(){
-      const p = getProject(currentProjectId);
-      if (!p){ previewCol.innerHTML = ""; return; }
-      let html = "";
-      (p.instances || []).forEach(inst => {
-        const mod = getModule(inst.moduleId); if (!mod) return;
-        html += `<div class="frame">${applyValues(mod.code, inst.values||{})}</div>`;
-      });
-      previewCol.innerHTML = html || `<div class="pill" style="display:inline-block">Nothing to preview yet.</div>`;
-    }
 
     /* ===== Modules Repo (Code Editor) ===== */
     function renderRepo(){
@@ -811,8 +559,7 @@ a { color: {{brandColor}}; }
       } else {
         const id = uid("mod"); modules.push({ id, name, code }); editingModuleId = id; modIdBadge.textContent = id;
       }
-      saveModules(); renderRepo(); // update composer add dropdown if currently in composer
-      if (location.hash.startsWith("#/composer/")) buildAddDropdown();
+      saveModules(); renderRepo();
     });
     btnDeleteModule.addEventListener("click", ()=>{
       if (!editingModuleId) return;
@@ -829,20 +576,8 @@ a { color: {{brandColor}}; }
       saveProjects();
       editingModuleId = null; modName.value = ""; modCode.value = ""; modIdBadge.textContent = "New";
       renderRepo();
-      if (location.hash.startsWith("#/composer/")){
-        buildAddDropdown(); renderComposerInputs(); renderPreviewOnly();
-      }
     });
 
-    /* ===== Copy HTML from Composer ===== */
-    btnCopy.addEventListener("click", async ()=>{
-      if (!location.hash.startsWith("#/composer/")) return;
-      try{
-        await navigator.clipboard.writeText(previewCol.innerHTML);
-        const old = btnCopy.textContent; btnCopy.textContent = "Copied!";
-        setTimeout(()=> btnCopy.textContent = old, 1200);
-      }catch{ alert("Copy failed. Select the preview and copy manually."); }
-    });
 
     /* ===== Boot ===== */
     (function init(){
