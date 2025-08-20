@@ -8,9 +8,9 @@
     :root{
       /* Color palette */
       --bg:#f7f8fb; --surface:#fff; --ink:#0f172a; --muted:#64748b;
-      --brand:#605bff; --brand-600:#4f46e5;
+      --brand:#0ea5e9; --brand-600:#0284c7;
       --success:#16a34a; --warn:#fbbf24; --danger:#ef4444;
-      --border:#e5e7eb; --accent:#eef2ff;
+      --border:#e5e7eb; --accent:#e0f2fe;
       /* Radii */
       --r-lg:14px; --r-md:10px; --r-sm:8px;
       /* Shadows */
@@ -88,10 +88,10 @@
     .nv-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:16px}
     .sep{
       grid-column:1 / span 2;display:flex;align-items:center;justify-content:space-between;
-      padding:8px 12px;margin:0 0 10px;background:var(--accent);border:1px dashed #c7d2fe;border-radius:999px;user-select:none
+      padding:8px 12px;margin:0 0 10px;background:var(--accent);border:1px dashed #bae6fd;border-radius:999px;user-select:none
     }
-    .handle{cursor:grab;color:#4338ca;display:flex;align-items:center;gap:8px}
-    .drop{grid-column:1 / span 2;height:10px;border-radius:999px;background:#c7d2fe;opacity:0;transform:scaleY(.5);transition:.15s ease;margin:6px 0}
+    .handle{cursor:grab;color:var(--brand-600);display:flex;align-items:center;gap:8px}
+    .drop{grid-column:1 / span 2;height:10px;border-radius:999px;background:#bae6fd;opacity:0;transform:scaleY(.5);transition:.15s ease;margin:6px 0}
     .drop.active{opacity:1;transform:scaleY(1)}
     .name-chip{padding:10px 12px;border-radius:999px;background:#f8fafc;border:1px solid var(--border);font-size:14px;color:#111827;margin:0 12px 8px 0}
     .value-row input{width:100%;border-radius:999px;background:#fff;border:1px solid var(--border);padding:10px 12px;margin:0 0 8px 12px}
