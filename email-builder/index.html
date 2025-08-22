@@ -120,70 +120,89 @@
   </style>
 </head>
 <body class="font-sans bg-slate-50 text-slate-900">
-  <header class="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200">
-    <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
-      <a href="#/" class="flex items-center gap-2 text-xl font-semibold">
-        <span class="text-brand">&lt;/&gt;</span>
-        <span>Modula</span>
-      </a>
-      <nav class="flex items-center gap-6">
-        <a href="#/projects" class="text-sm font-medium hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Projects</a>
-        <a href="#/modules" class="text-sm font-medium hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Modules</a>
-        <a href="#/composer" class="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Composer</a>
-        <div id="userSpot"></div>
-        <button id="btnCopy" class="hidden rounded-full bg-brand px-3 py-1.5 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2" title="Copy Final HTML from Composer">Copy HTML</button>
-      </nav>
-    </div>
-  </header>
+    <header class="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200">
+      <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
+        <a href="#/" class="flex items-center gap-2 text-xl font-semibold">
+          <span class="text-brand">&lt;/&gt;</span>
+          <span>Modula</span>
+        </a>
+        <nav class="flex flex-wrap items-center gap-6">
+          <a id="nav-pricing" href="#/pricing" class="text-sm font-medium hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Pricing</a>
+          <a id="nav-demo" href="#/demo" class="text-sm font-medium hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Book a demo</a>
+          <a id="nav-projects" href="#/projects" class="text-sm font-medium hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Projects</a>
+          <a id="nav-modules" href="#/modules" class="text-sm font-medium hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Modules</a>
+          <a id="nav-composer" href="#/composer" class="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Composer</a>
+          <div id="userSpot"></div>
+          <button id="btnCopy" class="hidden rounded-full bg-brand px-3 py-1.5 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2" title="Copy Final HTML from Composer">Copy HTML</button>
+        </nav>
+      </div>
+    </header>
 
   <main>
     <div class="mx-auto max-w-5xl p-4">
-    <!-- HOME -->
-    <section id="view-home" class="py-24">
-      <div class="mx-auto max-w-5xl text-center">
-        <span class="mb-6 inline-block rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm text-muted">Email builder</span>
-        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Build modular emails faster</h1>
-        <p class="mt-4 text-lg text-muted">Compose campaigns in minutes by assembling reusable modules.</p>
-        <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a href="#/projects" class="rounded-full bg-brand px-6 py-3 text-base font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Projects</a>
-          <a href="#/modules" class="rounded-full bg-brand px-6 py-3 text-base font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Modules</a>
+      <!-- HOME -->
+      <section id="view-home" class="py-24">
+        <div class="mx-auto max-w-5xl text-center">
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Build modular emails faster</h1>
+          <p class="mt-4 text-lg text-muted">Compose campaigns in minutes by assembling reusable modules.</p>
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a href="#/pricing" class="rounded-full bg-brand px-6 py-3 text-base font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Pricing</a>
+            <a href="#/demo" class="rounded-full bg-brand px-6 py-3 text-base font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Book a demo</a>
+          </div>
         </div>
-      </div>
 
-      <div class="mx-auto mt-20 grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-          <h3 class="mb-4 text-lg font-semibold">Recent Projects</h3>
-          <div class="space-y-2 text-sm text-muted">
-            <div class="h-3 w-3/4 rounded bg-slate-100"></div>
-            <div class="h-3 w-2/3 rounded bg-slate-100"></div>
-            <div class="h-3 w-1/2 rounded bg-slate-100"></div>
+        <div class="mx-auto mt-20 grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-3">
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft text-center">
+            <h3 class="mb-2 text-lg font-semibold">Reusable modules</h3>
+            <p class="text-sm text-muted">Build a library once and reuse everywhere.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft text-center">
+            <h3 class="mb-2 text-lg font-semibold">Live preview</h3>
+            <p class="text-sm text-muted">See changes instantly as you edit.</p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft text-center">
+            <h3 class="mb-2 text-lg font-semibold">Copy-ready HTML</h3>
+            <p class="text-sm text-muted">Export code that's ready to send.</p>
           </div>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-          <h3 class="mb-4 text-lg font-semibold">Quick Actions</h3>
-          <div class="space-y-2 text-sm text-muted">
-            <div class="h-3 w-1/2 rounded bg-slate-100"></div>
-            <div class="h-3 w-2/3 rounded bg-slate-100"></div>
-            <div class="h-3 w-1/3 rounded bg-slate-100"></div>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-          <h3 class="mb-4 text-lg font-semibold">Module Library</h3>
-          <div class="space-y-2 text-sm text-muted">
-            <div class="h-3 w-2/3 rounded bg-slate-100"></div>
-            <div class="h-3 w-3/4 rounded bg-slate-100"></div>
-            <div class="h-3 w-1/2 rounded bg-slate-100"></div>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-          <h3 class="mb-4 text-lg font-semibold">Live Preview</h3>
-          <div class="h-32 rounded bg-slate-100"></div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- PROJECTS LIST -->
-    <section id="view-projects" class="card hidden">
+      <!-- PRICING -->
+      <section id="view-pricing" class="hidden py-24">
+        <div class="mx-auto max-w-5xl text-center">
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Pricing</h1>
+          <p class="mt-4 text-lg text-muted">Choose the plan that fits your team.</p>
+          <div class="mt-10 grid gap-6 sm:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+              <h3 class="mb-2 text-xl font-semibold">Starter</h3>
+              <p class="mb-6 text-sm text-muted">For trying things out.</p>
+              <a href="#/auth" class="block rounded-full bg-brand px-4 py-2 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Get started</a>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+              <h3 class="mb-2 text-xl font-semibold">Pro</h3>
+              <p class="mb-6 text-sm text-muted">For growing teams.</p>
+              <a href="#/auth" class="block rounded-full bg-brand px-4 py-2 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Start trial</a>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+              <h3 class="mb-2 text-xl font-semibold">Team</h3>
+              <p class="mb-6 text-sm text-muted">For large organizations.</p>
+              <a href="#/auth" class="block rounded-full bg-brand px-4 py-2 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Contact sales</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEMO -->
+      <section id="view-demo" class="hidden py-24">
+        <div class="mx-auto max-w-3xl text-center">
+          <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Book a demo</h1>
+          <p class="mt-4 text-lg text-muted">See Modula in action.</p>
+          <a id="demoButton" href="#" target="_blank" class="mt-10 inline-block rounded-full bg-brand px-6 py-3 text-base font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Schedule a demo</a>
+        </div>
+      </section>
+
+      <!-- PROJECTS LIST -->
+      <section id="view-projects" class="card hidden">
       <div class="bar">
         <strong>Projects</strong>
         <div style="flex:1"></div>
@@ -341,9 +360,10 @@
     /* ===== Storage keys ===== */
     const MODULES_KEY  = "pro_modules_v6";
     const PROJECTS_KEY = "pro_projects_v1";
-    const USERS_KEY    = "modula_users";
-    const PROFILES_KEY = "modula_profiles";
-    const SESSION_KEY  = "modula_session";
+      const USERS_KEY    = "modula_users";
+      const PROFILES_KEY = "modula_profiles";
+      const SESSION_KEY  = "modula_session";
+      const DEMO_URL     = "https://example.com/demo";
 
     /* ===== State ===== */
     let modules = [];   // [{id, name, code}]
@@ -358,14 +378,16 @@
     const $ = s => document.querySelector(s);
     const qs = (node, s) => node.querySelector(s);
 
-    const views = {
-      home: $("#view-home"),
-      projects: $("#view-projects"),
-      composer: $("#view-composer"),
-      modules: $("#view-modules"),
-      auth: $("#view-auth"),
-      profile: $("#view-profile")
-    };
+      const views = {
+        home: $("#view-home"),
+        pricing: $("#view-pricing"),
+        demo: $("#view-demo"),
+        projects: $("#view-projects"),
+        composer: $("#view-composer"),
+        modules: $("#view-modules"),
+        auth: $("#view-auth"),
+        profile: $("#view-profile")
+      };
 
     const nvGrid = $("#nvGrid");
     const previewCol = $("#previewCol");
@@ -414,7 +436,15 @@
     const tagSelect = $("#tagSelect");
     const tagInput = $("#tagInput");
     const tagCancel = $("#tagCancel");
-    const tagConfirm = $("#tagConfirm");
+      const tagConfirm = $("#tagConfirm");
+
+      const navPricing = $("#nav-pricing");
+      const navDemo = $("#nav-demo");
+      const navProjects = $("#nav-projects");
+      const navModules = $("#nav-modules");
+      const navComposer = $("#nav-composer");
+      const demoButton = $("#demoButton");
+      if (demoButton) demoButton.href = DEMO_URL;
 
     /* ===== Router ===== */
     function go(hash){ location.hash = hash; }
@@ -429,39 +459,51 @@
       const needsAuth = ["projects","modules","composer","profile"];
       if (needsAuth.includes(route) && !requireAuth(hash)) return;
 
-      switch(route){
-        case "projects":
-          views.projects.classList.remove("hidden");
-          renderProjectsList();
-          break;
-        case "modules":
-          views.modules.classList.remove("hidden");
-          renderRepo();
-          break;
-        case "composer":
-          currentProjectId = arg || null;
-          if (!currentProjectId || !getProject(currentProjectId)){
-            go("#/projects"); return;
-          }
-          views.composer.classList.remove("hidden");
-          btnCopy.classList.remove("hidden");
-          buildAddDropdown();
-          renderComposerInputs();
-          renderPreviewOnly();
-          composerProjectName.textContent = getProject(currentProjectId).name;
-          break;
-        case "auth":
-          views.auth.classList.remove("hidden");
-          authMessage.textContent = authRedirectMsg;
-          break;
-        case "profile":
-          views.profile.classList.remove("hidden");
-          renderProfile();
-          break;
-        default:
-          views.home.classList.remove("hidden");
+        switch(route){
+          case "pricing":
+            views.pricing.classList.remove("hidden");
+            break;
+          case "demo":
+            views.demo.classList.remove("hidden");
+            break;
+          case "projects":
+            views.projects.classList.remove("hidden");
+            renderProjectsList();
+            break;
+          case "modules":
+            views.modules.classList.remove("hidden");
+            renderRepo();
+            break;
+          case "composer":
+            currentProjectId = arg || null;
+            if (!currentProjectId || !getProject(currentProjectId)){
+              go("#/projects"); return;
+            }
+            views.composer.classList.remove("hidden");
+            btnCopy.classList.remove("hidden");
+            buildAddDropdown();
+            renderComposerInputs();
+            renderPreviewOnly();
+            composerProjectName.textContent = getProject(currentProjectId).name;
+            break;
+          case "auth":
+            views.auth.classList.remove("hidden");
+            authMessage.textContent = authRedirectMsg;
+            break;
+          case "profile":
+            views.profile.classList.remove("hidden");
+            renderProfile();
+            break;
+          default:
+            views.home.classList.remove("hidden");
+        }
       }
-    }
+
+      function renderNav(){
+        const sess = getSession();
+        [navProjects, navModules, navComposer].forEach(el => el.classList.toggle("hidden", !sess));
+        [navPricing, navDemo].forEach(el => el.classList.toggle("hidden", !!sess));
+      }
 
     /* ===== Persistence ===== */
     function saveModules(){ localStorage.setItem(MODULES_KEY, JSON.stringify(modules)); }
@@ -489,9 +531,10 @@
     function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
     function getProfiles(){ return JSON.parse(localStorage.getItem(PROFILES_KEY) || "{}"); }
     function saveProfiles(p){ localStorage.setItem(PROFILES_KEY, JSON.stringify(p)); }
-    function getSession(){ return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
-    function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
-    function requireAuth(hash){
+      function getSession(){ return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
+      function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+      function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+      function requireAuth(hash){
       if (!getSession()){
         intendedRoute = hash;
         authRedirectMsg = "Please sign in to continue.";
@@ -500,15 +543,16 @@
       }
       return true;
     }
-    function signOut(){ localStorage.removeItem(SESSION_KEY); renderUserSpot(); go("#/"); }
+      function signOut(){ clearSession(); renderUserSpot(); go("#/"); }
     function constantTimeEqual(a,b){ if (a.length !== b.length) return false; let d = 0; for(let i=0;i<a.length;i++) d |= a.charCodeAt(i)^b.charCodeAt(i); return d===0; }
-    function renderUserSpot(){
-      userSpot.innerHTML = "";
-      const sess = getSession();
-      if (!sess){
-        userSpot.innerHTML = '<a href="#/auth" class="text-sm font-medium hover:text-brand">Sign in</a>';
-        return;
-      }
+      function renderUserSpot(){
+        userSpot.innerHTML = "";
+        const sess = getSession();
+        renderNav();
+        if (!sess){
+          userSpot.innerHTML = '<a href="#/auth" class="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white shadow-soft hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2">Sign in</a>';
+          return;
+        }
       const profile = getProfiles()[sess.email] || {};
       const name = profile.displayName || sess.email;
       const avatar = profile.avatarUrl;
