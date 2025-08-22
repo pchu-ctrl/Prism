@@ -254,8 +254,72 @@
       </div>
     </section>
 
-    <!-- AUTH PLACEHOLDER -->
-    <section id="view-auth" class="card hidden"></section>
+    <!-- AUTH -->
+    <section id="view-auth" class="hidden py-20">
+      <div class="mx-auto max-w-md rounded-2xl bg-white p-6 shadow-soft">
+        <div class="mb-4 flex rounded-full bg-slate-100 p-1">
+          <button id="tabSignIn" class="flex-1 rounded-full px-4 py-2 text-sm font-medium">Sign in</button>
+          <button id="tabSignUp" class="flex-1 rounded-full px-4 py-2 text-sm font-medium">Create account</button>
+        </div>
+        <form id="formSignIn" class="space-y-4">
+          <div>
+            <input id="siEmail" type="email" placeholder="Email" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+            <small id="siEmailErr" class="text-red-600"></small>
+          </div>
+          <div>
+            <input id="siPassword" type="password" placeholder="Password" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+            <small id="siPasswordErr" class="text-red-600"></small>
+          </div>
+          <button id="btnSignIn" type="submit" class="w-full rounded-full bg-brand px-4 py-2 font-medium text-white shadow-soft">Sign in</button>
+          <div id="siGenericErr" class="text-red-600 text-sm"></div>
+        </form>
+        <form id="formSignUp" class="hidden space-y-4">
+          <div>
+            <input id="suDisplayName" type="text" placeholder="Display name" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+            <small id="suDisplayNameErr" class="text-red-600"></small>
+          </div>
+          <div>
+            <input id="suAvatar" type="url" placeholder="Avatar URL (optional)" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+          </div>
+          <div>
+            <input id="suEmail" type="email" placeholder="Email" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+            <small id="suEmailErr" class="text-red-600"></small>
+          </div>
+          <div>
+            <input id="suPassword" type="password" placeholder="Password" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+            <small id="suPasswordErr" class="text-red-600"></small>
+          </div>
+          <button id="btnSignUp" type="submit" class="w-full rounded-full bg-brand px-4 py-2 font-medium text-white shadow-soft">Create account</button>
+          <div id="suGenericErr" class="text-red-600 text-sm"></div>
+        </form>
+      </div>
+      <div id="authMessage" class="mt-4 text-center text-sm text-red-600"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="view-profile" class="hidden py-20">
+      <div class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-soft">
+        <div class="mb-6 flex items-center gap-4">
+          <div id="profileAvatar" class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 text-xl font-semibold"></div>
+          <div>
+            <div id="profileDisplayName" class="text-lg font-semibold"></div>
+            <div id="profileEmail" class="text-sm text-muted"></div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label for="profileAvatarInput" class="mb-1 block text-sm font-medium">Avatar URL</label>
+            <input id="profileAvatarInput" type="url" class="w-full rounded-full border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600">
+          </div>
+          <div>
+            <label for="profileBio" class="mb-1 block text-sm font-medium">Bio</label>
+            <textarea id="profileBio" class="w-full rounded-md border border-slate-300 px-4 py-2 focus-visible:ring-2 focus-visible:ring-brand-600" rows="4"></textarea>
+          </div>
+          <button id="btnSaveProfile" class="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white shadow-soft">Save</button>
+          <div id="profileStatus" class="text-sm"></div>
+        </div>
+      </div>
+    </section>
       </div>
   </main>
 
@@ -272,16 +336,23 @@
       </div>
     </div>
 
+    <script src="js/app.js"></script>
     <script>
     /* ===== Storage keys ===== */
     const MODULES_KEY  = "pro_modules_v6";
     const PROJECTS_KEY = "pro_projects_v1";
+    const USERS_KEY    = "modula_users";
+    const PROFILES_KEY = "modula_profiles";
+    const SESSION_KEY  = "modula_session";
 
     /* ===== State ===== */
     let modules = [];   // [{id, name, code}]
     let projects = [];  // [{id, name, instances:[{instanceId,moduleId,values:{}}], createdAt, updatedAt}]
     let editingModuleId = null;
     let currentProjectId = null;
+    let authRedirectMsg = "";
+    let intendedRoute = "#/projects";
+    let profileMessage = "";
 
     /* ===== DOM Helpers ===== */
     const $ = s => document.querySelector(s);
@@ -292,7 +363,8 @@
       projects: $("#view-projects"),
       composer: $("#view-composer"),
       modules: $("#view-modules"),
-      auth: $("#view-auth")
+      auth: $("#view-auth"),
+      profile: $("#view-profile")
     };
 
     const nvGrid = $("#nvGrid");
@@ -302,6 +374,34 @@
     const btnCopy = $("#btnCopy");
     const projectsList = $("#projectsList");
     const composerProjectName = $("#composerProjectName");
+    const userSpot = $("#userSpot");
+    const authMessage = $("#authMessage");
+    const tabSignIn = $("#tabSignIn");
+    const tabSignUp = $("#tabSignUp");
+    const formSignIn = $("#formSignIn");
+    const formSignUp = $("#formSignUp");
+    const siEmail = $("#siEmail");
+    const siPassword = $("#siPassword");
+    const siEmailErr = $("#siEmailErr");
+    const siPasswordErr = $("#siPasswordErr");
+    const siGenericErr = $("#siGenericErr");
+    const btnSignIn = $("#btnSignIn");
+    const suDisplayName = $("#suDisplayName");
+    const suAvatar = $("#suAvatar");
+    const suEmail = $("#suEmail");
+    const suPassword = $("#suPassword");
+    const suDisplayNameErr = $("#suDisplayNameErr");
+    const suEmailErr = $("#suEmailErr");
+    const suPasswordErr = $("#suPasswordErr");
+    const suGenericErr = $("#suGenericErr");
+    const btnSignUp = $("#btnSignUp");
+    const profileAvatar = $("#profileAvatar");
+    const profileDisplayName = $("#profileDisplayName");
+    const profileEmail = $("#profileEmail");
+    const profileAvatarInput = $("#profileAvatarInput");
+    const profileBio = $("#profileBio");
+    const btnSaveProfile = $("#btnSaveProfile");
+    const profileStatus = $("#profileStatus");
 
     const repoList = $("#repoList");
     const modName = $("#modName");
@@ -321,11 +421,14 @@
     window.addEventListener("hashchange", renderRoute);
 
     function renderRoute(){
-      // hide all
       Object.values(views).forEach(v => v.classList.add("hidden"));
       btnCopy.classList.add("hidden");
 
-      const [_, route, arg] = location.hash.split("/");
+      const hash = location.hash || "#/";
+      const [_, route, arg] = hash.split("/");
+      const needsAuth = ["projects","modules","composer","profile"];
+      if (needsAuth.includes(route) && !requireAuth(hash)) return;
+
       switch(route){
         case "projects":
           views.projects.classList.remove("hidden");
@@ -349,6 +452,11 @@
           break;
         case "auth":
           views.auth.classList.remove("hidden");
+          authMessage.textContent = authRedirectMsg;
+          break;
+        case "profile":
+          views.profile.classList.remove("hidden");
+          renderProfile();
           break;
         default:
           views.home.classList.remove("hidden");
@@ -374,6 +482,144 @@
         });
       });
       saveModules(); saveProjects();
+    }
+
+    /* ===== Auth helpers ===== */
+    function getUsers(){ return JSON.parse(localStorage.getItem(USERS_KEY) || "{}"); }
+    function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+    function getProfiles(){ return JSON.parse(localStorage.getItem(PROFILES_KEY) || "{}"); }
+    function saveProfiles(p){ localStorage.setItem(PROFILES_KEY, JSON.stringify(p)); }
+    function getSession(){ return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
+    function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+    function requireAuth(hash){
+      if (!getSession()){
+        intendedRoute = hash;
+        authRedirectMsg = "Please sign in to continue.";
+        go("#/auth");
+        return false;
+      }
+      return true;
+    }
+    function signOut(){ localStorage.removeItem(SESSION_KEY); renderUserSpot(); go("#/"); }
+    function constantTimeEqual(a,b){ if (a.length !== b.length) return false; let d = 0; for(let i=0;i<a.length;i++) d |= a.charCodeAt(i)^b.charCodeAt(i); return d===0; }
+    function renderUserSpot(){
+      userSpot.innerHTML = "";
+      const sess = getSession();
+      if (!sess){
+        userSpot.innerHTML = '<a href="#/auth" class="text-sm font-medium hover:text-brand">Sign in</a>';
+        return;
+      }
+      const profile = getProfiles()[sess.email] || {};
+      const name = profile.displayName || sess.email;
+      const avatar = profile.avatarUrl;
+      const initials = name.charAt(0).toUpperCase();
+      const wrap = document.createElement("div");
+      wrap.className = "relative";
+      wrap.innerHTML = `
+        <button id="userChip" class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-sm">
+          ${avatar ? `<img src="${avatar}" class="h-6 w-6 rounded-full object-cover"/>` : `<span class="h-6 w-6 rounded-full bg-brand text-white flex items-center justify-center">${initials}</span>`}
+          <span>${name}</span>
+          <svg class="h-4 w-4 text-muted" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.292l3.71-4.06a.75.75 0 011.08 1.04l-4.25 4.65a.75.75 0 01-1.08 0l-4.25-4.65a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+        </button>
+        <div id="userMenu" class="absolute right-0 mt-2 hidden w-40 rounded-md border border-slate-200 bg-white shadow-soft">
+          <a href="#/profile" class="block px-4 py-2 text-sm hover:bg-slate-50">Profile</a>
+          <button id="btnSignOut" class="block w-full text-left px-4 py-2 text-sm hover:bg-slate-50">Sign out</button>
+        </div>`;
+      userSpot.appendChild(wrap);
+      const menu = userSpot.querySelector("#userMenu");
+      userSpot.querySelector("#userChip").addEventListener("click", ()=> menu.classList.toggle("hidden"));
+      userSpot.querySelector("#btnSignOut").addEventListener("click", ()=> signOut());
+    }
+    function renderProfile(){
+      const sess = getSession(); if (!sess) return;
+      const profiles = getProfiles(); const p = profiles[sess.email]; if (!p) return;
+      profileDisplayName.textContent = p.displayName || "";
+      profileEmail.textContent = sess.email;
+      profileAvatarInput.value = p.avatarUrl || "";
+      profileBio.value = p.bio || "";
+      if (p.avatarUrl){
+        profileAvatar.innerHTML = `<img src="${p.avatarUrl}" class="h-16 w-16 rounded-full object-cover"/>`;
+      } else {
+        const initials = (p.displayName||"?").split(/\s+/).map(n=>n[0]).join('').slice(0,2).toUpperCase();
+        profileAvatar.innerHTML = `<div class="h-16 w-16 rounded-full bg-brand text-white flex items-center justify-center">${initials}</div>`;
+      }
+      profileStatus.textContent = profileMessage;
+      profileStatus.className = "text-sm";
+      if (profileMessage){ profileStatus.classList.add("text-green-600"); profileMessage = ""; }
+      renderUserSpot();
+    }
+
+    tabSignIn.addEventListener("click", ()=>{
+      formSignIn.classList.remove("hidden");
+      formSignUp.classList.add("hidden");
+    });
+    tabSignUp.addEventListener("click", ()=>{
+      formSignIn.classList.add("hidden");
+      formSignUp.classList.remove("hidden");
+    });
+    formSignUp.addEventListener("submit", handleSignUp);
+    formSignIn.addEventListener("submit", handleSignIn);
+    btnSaveProfile.addEventListener("click", saveProfile);
+
+    function saveProfile(){
+      const sess = getSession(); if(!sess) return;
+      const profiles = getProfiles(); const p = profiles[sess.email]; if(!p) return;
+      p.avatarUrl = profileAvatarInput.value.trim();
+      p.bio = profileBio.value;
+      p.updatedAt = new Date().toISOString();
+      saveProfiles(profiles);
+      profileMessage = "Profile saved";
+      renderProfile();
+    }
+    async function handleSignUp(e){
+      e.preventDefault();
+      suDisplayNameErr.textContent = ""; suEmailErr.textContent = ""; suPasswordErr.textContent = ""; suGenericErr.textContent = "";
+      const displayName = suDisplayName.value.trim();
+      const email = suEmail.value.trim().toLowerCase();
+      const password = suPassword.value;
+      if (!displayName){ suDisplayNameErr.textContent = "Required"; suDisplayName.focus(); return; }
+      if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ suEmailErr.textContent = "Invalid email"; suEmail.focus(); return; }
+      if (password.length < 8){ suPasswordErr.textContent = "Min 8 characters"; suPassword.focus(); return; }
+      const users = getUsers();
+      if (users[email]){ suEmailErr.textContent = "Email already exists"; suEmail.focus(); return; }
+      btnSignUp.disabled = true;
+      const salt = base64FromBytes(generateSalt());
+      const hash = await hashPassword(password, salt);
+      const now = new Date().toISOString();
+      users[email] = { email, passwordHash: hash, salt, createdAt: now };
+      saveUsers(users);
+      const profiles = getProfiles();
+      profiles[email] = { email, displayName, avatarUrl: suAvatar.value.trim(), bio:"", updatedAt: now };
+      saveProfiles(profiles);
+      setSession({ email, issuedAt: now });
+      btnSignUp.disabled = false;
+      profileMessage = "Account created";
+      renderUserSpot();
+      go("#/profile");
+    }
+    async function handleSignIn(e){
+      e.preventDefault();
+      siEmailErr.textContent = ""; siPasswordErr.textContent = ""; siGenericErr.textContent = "";
+      const email = siEmail.value.trim().toLowerCase();
+      const password = siPassword.value;
+      if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ siEmailErr.textContent = "Invalid email"; siEmail.focus(); return; }
+      if (password.length < 8){ siPasswordErr.textContent = "Min 8 characters"; siPassword.focus(); return; }
+      const user = getUsers()[email];
+      if (!user){ siGenericErr.textContent = "Invalid email or password"; siEmail.focus(); return; }
+      btnSignIn.disabled = true;
+      const hash = await hashPassword(password, user.salt);
+      btnSignIn.disabled = false;
+      if (!constantTimeEqual(hash, user.passwordHash)){
+        siGenericErr.textContent = "Invalid email or password";
+        siPassword.focus(); return;
+      }
+      const now = new Date().toISOString();
+      setSession({ email, issuedAt: now });
+      authRedirectMsg = "";
+      renderUserSpot();
+      const dest = intendedRoute || "#/projects";
+      intendedRoute = "#/projects";
+      go(dest);
     }
 
     /* ===== Modules starter pack (header + 10 content + footer) ===== */
@@ -932,6 +1178,7 @@ a { color: {{brandColor}}; }
     /* ===== Boot ===== */
     (function init(){
       loadAll();
+      renderUserSpot();
       renderRoute();
     })();
   </script>
